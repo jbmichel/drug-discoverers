@@ -1,0 +1,535 @@
+# Question bank v0 — dossier mode.
+#
+# Each card is a research task, not a rhetorical challenge. The fields that
+# make it a task rather than a critique are `evidence`, `good_evidence` and
+# `absence_means`.
+#
+# `gate: N` marks a kill question. Gates run in order, cheapest first: a
+# badly-answered gate stops the dossier rather than deferring the problem to
+# a later section. Everything without a gate is dossier body.
+#
+# `persona` attributes the heuristic to someone who argues it in public.
+# `source` is where. Both are required — an unattributed card is a generic
+# checklist item and should be deleted.
+#
+# STATUS: hand-built from the Grade A source manifest, before any crawling.
+# This is the schema test. Expect the extraction pass to add ~10x more.
+
+meta:
+  version: 0
+  cards: 30
+  built_from: sources.md (Grade A manifest)
+  note: >
+    Personas are reconstructions from public writing, not the people. Every
+    card carries a source so a reader can check the attribution.
+
+# Tag taxonomy. A card fires if its `fires_when` overlaps the caller's tags
+# once both sides are closed over this tree in BOTH directions: naming a
+# parent ("anti-infective") fires child-tagged cards, and naming a child
+# ("antibacterial") fires parent-tagged cards. Matching is case- and
+# separator-insensitive, so gene-therapy == "gene therapy".
+tag_tree:
+  anti-infective: [antibacterial, antiviral, antifungal, antiparasitic]
+  genetic medicine: [gene therapy, gene editing, aso, sirna, mrna]
+  biologics: [antibody, enzyme replacement, peptide]
+  cell therapy: [car-t, til]
+  small molecule: [covalent, degrader, fragment-derived]
+
+dimensions:
+  causal:      Causal human biology — is the mechanism real in people?
+  precedent:   Precedent — has this been tried, and what happened?
+  tractable:   Tractability — can a molecule do this, in the right tissue?
+  models:      Model validity — will anything preclinical predict?
+  patients:    Patients and natural history — who exactly, progressing how?
+  endpoints:   Endpoints — can the effect be detected in a feasible trial?
+  safety:      Safety and window — what breaks, and at what exposure?
+  competition: Competitive position — who else, and why the gap?
+  execution:   Execution — CMC, durability, manufacturability, cost
+  decision:    Decision economics — what would change our mind, cheapest first
+
+cards:
+
+# ---------------------------------------------------------------- GATES
+
+- id: causal-human-lof
+  gate: 1
+  dimension: causal
+  question: >
+    Is there a human loss-of-function (or gain-of-function) phenotype whose
+    direction of effect matches what the drug is meant to do?
+  persona: Robert Plenge
+  principle: >
+    Human genetics is the only target-validation evidence that is already in
+    the right species. Direction of effect matters as much as association.
+  evidence: [gnomAD, Open Targets Genetics, UK Biobank exome PheWAS, ClinVar, OMIM]
+  good_evidence: >
+    Homozygous or compound-het human LoF carriers described, with a phenotype
+    in the intended direction, ideally an allelic series showing dose-response.
+  absence_means: >
+    Not fatal, but the program is now resting on model organisms. Say so
+    explicitly and move the burden of proof to the models section.
+  weak_answer_tells:
+    - mouse knockout offered as the human evidence
+    - GWAS association with no direction of effect
+    - the human LoF phenotype is known, inconvenient, and unmentioned
+  source: plengegen.com — genetics-to-target series; NRDD target validation review
+
+- id: causal-outlier-humans
+  gate: 1
+  dimension: causal
+  question: >
+    Are there humans at the extremes of this phenotype, and has anyone
+    sequenced them?
+  persona: Helen Hobbs
+  principle: >
+    Outliers carry the mechanism. The Dallas Heart Study method: find people
+    at the tail, find what is different about them.
+  evidence: [Dallas Heart Study, deCODE, UK Biobank tails, disease registries]
+  good_evidence: Protective or extreme-phenotype carriers with a named variant.
+  absence_means: >
+    A real gap and often a cheap one to close — an outlier-sequencing
+    collaboration may be the highest-yield early experiment.
+  source: JCI "A conversation with Helen Hobbs"; PCSK9/ANGPTL3 work
+
+- id: precedent-tried-before
+  gate: 2
+  dimension: precedent
+  question: >
+    Has this target, or this mechanism, been taken into humans before — and
+    if it failed, do we know why it failed rather than that it failed?
+  persona: Derek Lowe
+  principle: >
+    Most "novel" targets have a graveyard. The failure reason is usually
+    recoverable and usually decides whether the idea is dead or just early.
+  evidence:
+    - ClinicalTrials.gov including terminated and withdrawn studies
+    - AdisInsight / Cortellis discontinued pipelines
+    - In the Pipeline archive
+    - conference abstracts that never became papers
+  good_evidence: >
+    A named prior program, its phase, and a mechanistic cause of failure
+    (exposure, safety, wrong patients, wrong endpoint) — not just "it failed".
+  absence_means: >
+    Either genuinely new, or the search was too shallow. Assume the latter
+    until a terminated-trial search has been run.
+  weak_answer_tells:
+    - claims novelty without having searched terminated trials
+    - failure attributed to the company rather than the biology
+  source: In the Pipeline, 2002–present, failure post-mortems
+
+- id: precedent-unpublished-negatives
+  gate: 2
+  dimension: precedent
+  question: >
+    Who has already done this work and not published it, and can we just ask?
+  persona: Aled Edwards / Chas Bountra
+  principle: >
+    The field duplicates failed work continuously because negatives are
+    invisible. Pre-competitive contact is cheaper than repeating it.
+  evidence: [SGC networks, target-specific consortia, patent filings without papers]
+  absence_means: Not knowable from the literature. This is a phone-call task.
+  source: SGC Open Science Principles; Bountra talks on duplicated failure
+
+- id: tractable-modality-fit
+  gate: 3
+  dimension: tractable
+  question: >
+    Given where this target sits and what it does, which modality can actually
+    engage it — and is that modality one we can deliver to that tissue?
+  persona: Andrew Hopkins / Pieter Cullis
+  principle: >
+    Druggability is modality-relative. The question is not "is it druggable"
+    but "druggable by what, delivered how".
+  evidence:
+    - structural data (PDB), pocket detection, chemical probe availability
+    - precedent for the modality reaching that tissue
+  good_evidence: >
+    A named modality with a named delivery route and at least one precedent
+    molecule reaching that compartment at a relevant exposure.
+  absence_means: >
+    The program is a delivery program before it is a target program. Budget
+    accordingly.
+  weak_answer_tells:
+    - names siRNA as the modality with no answer on tissue beyond liver
+    - CNS target with no discussion of BBB penetrance
+  source: Hopkins ligand efficiency / druggable genome; Cullis LNP reviews
+
+- id: tractable-undruggable-recheck
+  dimension: tractable
+  question: >
+    If this is called undruggable — who decided that, when, and did they look
+    for a cryptic or allosteric pocket, or only the orthosteric one?
+  persona: Kevan Shokat
+  principle: >
+    KRAS was undruggable until someone looked at a pocket that only opens in
+    one mutant. "Undruggable" is usually a statement about past effort.
+  evidence: [MD simulations, covalent fragment screens, allosteric site literature]
+  absence_means: An unexamined assumption worth an explicit re-check.
+  source: Shokat KRAS G12C switch-II work; NIH WALS lecture
+
+- id: models-predictive-validity
+  gate: 4
+  dimension: models
+  question: >
+    What is the predictive validity of the primary model — how well does it
+    rank candidates against what happens in patients? Not its throughput.
+  persona: Jack Scannell
+  principle: >
+    Model validity dominates throughput in determining R&D productivity.
+    A cheap high-throughput model with poor validity destroys value.
+  evidence:
+    - published concordance between this model and clinical outcome
+    - how many drugs that worked in this model worked in humans, and vice versa
+  good_evidence: A quantified hit rate, even a poor one, with a citation.
+  absence_means: >
+    Very common and rarely admitted. If unquantified, treat every preclinical
+    readout downstream as weaker than it appears and say so in the summary.
+  weak_answer_tells:
+    - throughput, cost per well, or compounds screened offered as the answer
+    - '"it''s the standard model in the field"'
+  source: NRDD Eroom's Law (2012); "Predictive validity in drug discovery"
+
+- id: endpoints-measurable
+  gate: 5
+  dimension: endpoints
+  question: >
+    Is there an endpoint that moves on a timescale and in a population size we
+    can actually run — and is it accepted, or will we have to qualify it?
+  persona: Mene Pangalos ("right patient")
+  principle: >
+    The 5R framework treats patient and endpoint selection as a technical
+    determinant of success, not a downstream clinical detail.
+  evidence:
+    - precedent approvals in the indication and what endpoint they used
+    - FDA/EMA qualified biomarkers, natural history studies
+  good_evidence: >
+    A precedent approval on the endpoint, or a biomarker with a regulatory
+    qualification path and a natural-history dataset behind it.
+  absence_means: >
+    The trial is the program risk. A dossier that skips this is describing
+    biology, not a drug program.
+  source: NRDD 2014 and 2018 5R papers
+
+# ------------------------------------------------------------ BODY: causal
+
+- id: causal-brake-or-pedal
+  dimension: causal
+  question: >
+    Is the thing we are modulating a brake or a pedal — and are we sure which
+    direction of intervention produces the effect we want?
+  persona: James Allison
+  principle: >
+    CTLA-4 was assumed to be an accelerator. Recognising it as a brake is
+    what made blockade the right intervention.
+  evidence: [perturbation data in both directions, human variant direction of effect]
+  source: Nobel lecture 2018; UC Berkeley CRL "Story of Yervoy"
+
+- id: causal-falsifiable
+  dimension: causal
+  question: >
+    What observation would falsify this hypothesis — and are we running that
+    experiment, or defending the hypothesis against it?
+  persona: John Hardy
+  principle: >
+    The amyloid hypothesis survived by being revised against contrary data.
+    A hypothesis with no falsifying experiment is a commitment, not a theory.
+  evidence: [the contrary literature, explicitly sought]
+  absence_means: A red flag on the whole dossier, not on one section.
+  source: Hardy commentaries revising the amyloid cascade hypothesis
+
+- id: causal-worth-answering
+  dimension: causal
+  question: >
+    If this works, what changes for patients — and is that change large enough
+    to be worth the decade?
+  persona: Joseph Goldstein / Roy Vagelos
+  principle: >
+    Taste in problem selection. Goldstein's Lasker essays are about which
+    questions deserve a career; Vagelos ran Merck on whether a drug was needed.
+  evidence: [standard of care, what patients actually get today]
+  source: Goldstein Nature Medicine Lasker essay series; Vagelos memoir
+
+# --------------------------------------------------------- BODY: tractable
+
+- id: tractable-ligandability
+  dimension: tractable
+  question: >
+    Has anyone got a fragment or a covalent hit on this protein, and at what
+    ligand efficiency?
+  persona: Daniel Erlanson / Andrew Hopkins
+  principle: >
+    Fragment hit rate is an empirical readout of ligandability, available
+    before a full screen.
+  evidence: [published fragment screens, Practical Fragments archive, covalent screens]
+  absence_means: Untested rather than intractable — a cheap experiment.
+  source: Practical Fragments; ligand efficiency literature
+
+- id: tractable-degradation-alternative
+  dimension: tractable
+  question: >
+    If occupancy-based inhibition is hard here, is this a degradation, splice
+    modulation, or genetic-medicine problem instead?
+  persona: Craig Crews / C. Frank Bennett
+  principle: >
+    Event-driven pharmacology removes the need for a deep binding pocket;
+    splice modulation removes the need for a pocket at all.
+  evidence: [E3 ligase expression in target tissue, ASO precedent, splice-site variants]
+  source: Crews PROTAC work; Bennett/Krainer nusinersen
+
+- id: tractable-pk-engineering
+  dimension: tractable
+  question: >
+    What half-life does the biology require, and is that an achievable
+    engineering target rather than a hope?
+  persona: Lotte Bjerre Knudsen
+  principle: >
+    Liraglutide and semaglutide were half-life engineering programs. The
+    required PK was treated as a design objective from the start.
+  evidence: [target turnover rate, receptor occupancy modelling, precedent PK]
+  source: '"Inventing Liraglutide", ACS Pharmacol Transl Sci 2019'
+
+- id: tractable-tissue-targeting
+  dimension: tractable
+  question: >
+    Can we make the molecule accumulate where the disease is rather than where
+    the chemistry naturally goes?
+  persona: Michael J. Sofia
+  principle: >
+    Sofosbuvir was a liver-targeting problem solved with a phosphoramidate
+    prodrug. Tissue targeting is a design variable, not a constraint.
+  evidence: [tissue distribution precedent, prodrug/conjugate strategies, GalNAc analogues]
+  source: '"Enter Sofosbuvir: The Path to Curing HCV" (Lasker essay, Cell 2016)'
+
+# ------------------------------------------------------------ BODY: models
+
+- id: models-assay-artifacts
+  dimension: models
+  question: >
+    Are the hits real, or are they aggregators, redox cyclers, or otherwise
+    PAINS — and has anyone run the orthogonal assay?
+  persona: Jonathan Baell
+  principle: >
+    A large fraction of published hit matter is assay artifact. The cost of
+    checking is trivial against the cost of not checking.
+  evidence: [PAINS filters, orthogonal assay format, dose-response shape, detergent controls]
+  absence_means: Treat the chemical series as unvalidated.
+  source: 'J Med Chem PAINS paper; Nature "Chemistry: Chemical con artists"'
+
+- id: models-probe-quality
+  dimension: models
+  question: >
+    Is the tool compound underpinning this biology actually selective at the
+    concentration used?
+  persona: Paul Workman
+  principle: >
+    A large body of target biology rests on poor chemical probes used above
+    their selectivity window.
+  evidence: [Chemical Probes Portal, selectivity panels, concentration used in key papers]
+  absence_means: The supporting biology is weaker than the citation count suggests.
+  source: The Drug Discoverer blog (ICR); Chemical Probes Portal fitness factors
+
+- id: models-evidence-standard
+  dimension: models
+  question: >
+    For each load-bearing claim in this dossier — is it a house of brick or a
+    mansion of straw?
+  persona: William Kaelin Jr.
+  principle: >
+    Papers have drifted toward many weakly-supported claims. Ask which single
+    claims the program depends on, and whether each is independently solid.
+  evidence: [replication status, independent labs, orthogonal methods]
+  source: '"Publish houses of brick, not mansions of straw", Nature 545:387 (2017)'
+
+# ---------------------------------------------------------- BODY: patients
+
+- id: patients-natural-history
+  dimension: patients
+  question: >
+    Do we know how untreated patients progress, quantitatively, with enough
+    resolution to power a trial?
+  persona: Mene Pangalos ("right patient")
+  evidence: [natural history studies, registries, patient organisation datasets]
+  absence_means: >
+    A natural-history study may be a prerequisite deliverable and should be
+    costed into the program, not assumed.
+  source: 5R framework
+
+- id: patients-stratification
+  dimension: patients
+  question: >
+    Which subset responds — and can we identify them prospectively with an
+    assay that exists today?
+  persona: Charles Sawyers / Brian Druker
+  principle: >
+    Imatinib worked because the population was defined by the lesion. An
+    unstratified trial in a heterogeneous population buries a real effect.
+  evidence: [genotype-phenotype data, companion diagnostic precedent]
+  source: Druker/Sawyers CML and prostate programs
+
+- id: patients-community
+  dimension: patients
+  question: >
+    Is there an organised patient community, and have we asked them what
+    outcome they actually want changed?
+  persona: Stanley Crooke
+  principle: >
+    n-Lorem exists because the patients defined the need. Patient organisations
+    also hold natural-history data and trial-ready cohorts.
+  evidence: [patient advocacy organisations, registries, existing natural history efforts]
+  source: n-Lorem Foundation; Crooke's own podcast series
+
+# --------------------------------------------------------- BODY: endpoints
+
+- id: endpoints-biomarker-chain
+  dimension: endpoints
+  question: >
+    Is there a biomarker that connects target engagement to clinical benefit —
+    and is each link in that chain evidenced separately?
+  persona: Paul Negulescu
+  principle: >
+    CF had sweat chloride: a biomarker tied to the mechanism that moved early
+    and predicted benefit. Most indications do not, and pretend otherwise.
+  evidence: [target engagement assay, mechanistic biomarker, clinical correlate]
+  absence_means: >
+    Every early trial becomes an outcome trial. This changes cost and duration
+    by an order of magnitude — state it in the summary, not a footnote.
+  source: Vertex CFTR program; Lasker 2025
+
+# ------------------------------------------------------------ BODY: safety
+
+- id: safety-lof-humans-again
+  dimension: safety
+  question: >
+    What is the phenotype of humans who already lack this target — that is
+    our best available safety readout, pre-clinically.
+  persona: Robert Plenge / Helen Hobbs
+  principle: >
+    Human LoF carriers are a natural safety experiment already run.
+  evidence: [gnomAD constraint, LoF carrier phenotypes, PheWAS on the variant]
+  source: genetics-for-target-validation literature
+
+- id: safety-on-target-window
+  dimension: safety
+  question: >
+    Is the toxicity we should fear on-target or off-target — and if on-target,
+    what separates therapeutic from toxic exposure?
+  persona: Derek Lowe
+  principle: >
+    On-target toxicity does not go away with a better molecule. It is a
+    property of the idea, not the chemistry.
+  evidence: [target expression atlas, tissue distribution, precedent class effects]
+  source: In the Pipeline, recurring theme across mechanism-toxicity posts
+
+- id: safety-resistance
+  dimension: safety
+  question: >
+    How will resistance or escape emerge, and what is the second-generation
+    plan?
+  persona: Charles Sawyers
+  principle: >
+    Resistance is a design input, not a post-approval surprise. Four distinct
+    enzalutamide-resistance mechanisms were mapped by the same lab.
+  evidence: [precedent resistance in class, mutational scanning, relapse sequencing plans]
+  fires_when: [oncology, anti-infective, antiviral]
+  source: Sawyers resistance work, MSK
+
+- id: safety-permeability-efflux
+  dimension: safety
+  question: >
+    For a Gram-negative target — do we have any compound series that gets in
+    and stays in?
+  persona: Lynn Silver
+  principle: >
+    Antibacterial discovery fails at permeability and efflux more than at
+    target biology. Screening cascades that ignore this generate dead series.
+  evidence: [accumulation assays, eNTRy rules, efflux-deficient strain comparisons]
+  fires_when: [antibacterial]
+  absence_means: Expect the series to fail late. Front-load the accumulation assay.
+  source: Silver, "Challenges of antibacterial discovery", Clin Microbiol Rev
+
+# ------------------------------------------------------- BODY: competition
+
+- id: competition-white-space
+  dimension: competition
+  question: >
+    Who else is working on this, how far ahead are they, and what would we
+    have that they do not?
+  persona: Bruce Booth
+  evidence: [ClinicalTrials.gov, patent landscape, company pipelines, conference abstracts]
+  weak_answer_tells:
+    - competitor list drawn only from press releases
+    - claims to be first without a patent search
+  source: LifeSciVC, on therapeutic crowding
+
+- id: competition-why-gap
+  dimension: competition
+  question: >
+    If this is such a good idea, why has nobody done it? Name the specific
+    barrier, and say what changed to remove it.
+  persona: Bruce Booth / Jack Scannell
+  principle: >
+    There is usually a reason. A new enabling technology, a new dataset, or a
+    genuine blind spot — but it should be nameable.
+  absence_means: The most common failure mode in an indication dossier.
+  source: LifeSciVC; R&D productivity literature
+
+# --------------------------------------------------------- BODY: execution
+
+- id: execution-durability
+  dimension: execution
+  question: >
+    For a one-shot genetic medicine — how long does the effect last, can it be
+    redosed, and what does pre-existing immunity do to eligibility?
+  persona: Katherine High / Fyodor Urnov
+  evidence: [AAV serostatus prevalence, durability data in class, redosing precedent]
+  fires_when: [gene therapy, gene editing]
+  source: Spark/AskBio gene therapy programs; IGI translational work
+
+- id: execution-manufacturing
+  dimension: execution
+  question: >
+    Can this be made at the scale and cost the indication requires, and is the
+    process a research process or a manufacturable one?
+  persona: Carl June / Steven Rosenberg
+  fires_when: [cell therapy, biologics, genetic medicine]
+  evidence: [COGS precedent in class, vein-to-vein time, CMC precedent]
+  source: CAR-T manufacturing experience at Penn and NCI
+
+# --------------------------------------------------------- BODY: decision
+
+- id: decision-cheapest-killer
+  dimension: decision
+  question: >
+    What is the cheapest experiment that could kill this program, and why
+    have we not run it yet?
+  persona: Bruce Booth / Bernard Munos
+  principle: >
+    Capital efficiency in early biotech is mostly about sequencing the killer
+    experiments first rather than the encouraging ones.
+  absence_means: >
+    If no experiment could kill it, the hypothesis is not falsifiable and the
+    dossier is advocacy.
+  source: LifeSciVC on staged investment; Munos on R&D productivity
+
+- id: decision-what-must-be-true
+  dimension: decision
+  question: >
+    List the things that must all be true for this to work. Which is the
+    weakest, and what is its probability?
+  persona: Mene Pangalos
+  principle: >
+    The 5R framework is a conjunction, not a scorecard. The program's
+    probability is bounded by its weakest R.
+  evidence: [each preceding dimension, scored]
+  source: NRDD 2014/2018
+
+- id: decision-consensus-risk
+  dimension: decision
+  question: >
+    If the field disagrees with us, is that because we are early or because we
+    are wrong — and what evidence would distinguish those?
+  persona: Judah Folkman
+  principle: >
+    Angiogenesis was right and unpopular for two decades. The same posture
+    also protects bad ideas, so the distinguishing evidence has to be named.
+  source: Folkman's angiogenesis work; "Dr. Folkman's War"
