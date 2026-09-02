@@ -120,6 +120,65 @@ Joseph Vacca · John C. Martin · Bernard Belleau · Nabil Seidah ·
 Joel Habener · Joseph Schlessinger · Tony Hunter · Lewis Cantley ·
 Nicola Curtin · Chris Abell · Wendy Young · Stephen Frye · Fred Van Goor
 
+## Source gathering — Grade A
+
+All 120 are accepted (triage stopped a third of the way in and the rest were
+taken wholesale; verdicts live in the artifact's store at `triage/verdicts`).
+
+The first artifact-gathering pass covers the **61 Grade A people** — one
+targeted web search each, findings recorded per person.
+
+- [`sources/batch*.json`](sources) — raw findings, source of truth. Edit these.
+- [`build_sources.py`](build_sources.py) — merges them into the two files below.
+- [`sources.json`](sources.json) — machine-readable manifest.
+- [`sources.md`](sources.md) — readable manifest, grouped by category.
+- [`sources/check_links.py`](sources/check_links.py) — bulk link checker.
+
+**Coverage: 61/61 people, 282 URLs, median 5 per person.** Confidence: 51
+verified (address seen in a search result), 5 constructed from a confirmed URL
+pattern and cross-checked by search, 5 partial (person resolved, best artifacts
+named rather than linked).
+
+### Crawl venues before people
+
+The biggest finding of this pass is that a handful of venues carry many people
+at once, and harvesting those first is far cheaper than going name by name:
+
+| Venue | Why it matters |
+| --- | --- |
+| **NobelPrize.org** | Fixed URL pattern `/prizes/<cat>/<year>/<surname>/{lecture,interview,podcast,biographical}/`, confirmed across seven prize years. Four to five artifacts per laureate, plus full lecture PDFs under `/uploads/`. 12 Grade A people, ~12 more in the wider roster. |
+| **Eric Topol, Ground Truths** | Long-form transcribed interviews by a working scientist. Already hit for Karikó, Knudsen, Urnov, Liu and Drucker off five separate searches — one feed, many people. |
+| **NIH VideoCast** | Downloadable lecture video with a stable archive. Shokat, Rosenberg, Baker confirmed. |
+| **Lasker award essays** | Each award carries a first-person essay, often in *Cell* or *JCI*. Sofia's "Enter Sofosbuvir" is the model — a complete design narrative as a free PDF. |
+| **JCI "A conversation with…"** | Long interview plus video in a consistent house format. |
+| **SfN History of Neuroscience in Autobiography** | Full first-person career accounts, free PDFs. |
+
+### Things worth knowing from this pass
+
+- **Paul Workman does run a blog** — "The Drug Discoverer" at the ICR. That plus
+  the Chemical Probes Portal makes him the closest thing to a Derek Lowe
+  operating inside an academic drug discovery unit.
+- **Daniel Drucker's glucagon.com** has been the incretin field's curated
+  repository for years — his own archive of the foundational literature.
+- **Joseph Goldstein has written an annual *Nature Medicine* essay** for the
+  Lasker Awards since ~2000, on what makes an experiment elegant. Paywalled and
+  not indexed as a series; worth assembling by hand.
+- **Michael Sofia's "Enter Sofosbuvir"** and **Lotte Bjerre Knudsen's
+  "Inventing Liraglutide"** are first-person invention accounts with the design
+  logic laid out step by step. These are the format to look for everywhere else.
+- **Four targets are not on the web at all** — the Janssen Pharmaceutica archive
+  in Beerse (850+ papers, 500+ presentations, an interview series), the Djerassi
+  papers at Stanford, Snyder's donated collection at Hopkins, and the Goldstein
+  essay series. `sources.md` lists what each needs.
+
+### Two corrections to the roster
+
+- **Carl June**: no memoir of his own could be found. The book-length account is
+  the 2022 documentary *Of Medicine and Miracles* plus third-party coverage.
+- **Pieter Cullis**: the roster credits him with a book on the LNP story; that
+  could not be confirmed. His *Nature Reviews Materials* narrative review
+  "From lipids to lipid nanoparticles to mRNA vaccines" is the real artifact.
+
 ## Caveats on the data
 
 - `url` is filled only where the address was verified (9 entries). Everything
