@@ -1,0 +1,268 @@
+<title>Discoverer Question Bank</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500;600&display=swap">
+<style>
+:root{
+ --ground:#EEF1F0;--surface:#FFF;--surface2:#F6F8F7;
+ --ink:#141F1E;--ink2:#394B49;--muted:#5F706E;
+ --rule:#D7DEDC;--rule2:#BFCAC8;
+ --accent:#1B4D4B;--accent-soft:#E2EDEB;
+ --gate:#9B3A22;--gate-soft:#F7E7E1;
+ --shadow:0 1px 2px rgba(20,31,30,.05),0 10px 26px -14px rgba(20,31,30,.22);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --ground:#0A1211;--surface:#121C1B;--surface2:#172221;
+ --ink:#E7EDEB;--ink2:#BCC9C7;--muted:#83958F;
+ --rule:#223130;--rule2:#324644;
+ --accent:#63B3AA;--accent-soft:#10302E;
+ --gate:#DD8163;--gate-soft:#331812;
+ --shadow:0 1px 2px rgba(0,0,0,.45),0 12px 30px -16px rgba(0,0,0,.8);
+}}
+:root[data-theme="dark"]{
+ --ground:#0A1211;--surface:#121C1B;--surface2:#172221;
+ --ink:#E7EDEB;--ink2:#BCC9C7;--muted:#83958F;
+ --rule:#223130;--rule2:#324644;
+ --accent:#63B3AA;--accent-soft:#10302E;
+ --gate:#DD8163;--gate-soft:#331812;
+ --shadow:0 1px 2px rgba(0,0,0,.45),0 12px 30px -16px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+ font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.6;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 96px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.lbl{font-family:"IBM Plex Mono",monospace;font-size:.67rem;letter-spacing:.13em;
+ text-transform:uppercase;color:var(--muted)}
+header{padding:34px 0 8px}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-weight:600;font-size:1.95rem;
+ margin:0 0 6px;letter-spacing:-.015em}
+.sub{color:var(--ink2);max-width:62ch;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:22px;margin:20px 0 0;padding:14px 0;
+ border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stat b{font-family:"IBM Plex Serif",serif;font-size:1.35rem;font-weight:600;
+ display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+.note{margin:18px 0 0;padding:12px 14px;background:var(--surface2);
+ border:1px solid var(--rule);border-radius:2px;font-size:.87rem;color:var(--ink2)}
+.controls{position:sticky;top:0;z-index:9;background:color-mix(in srgb,var(--ground) 94%,transparent);
+ backdrop-filter:blur(9px);border-bottom:1px solid var(--rule);
+ padding:12px 0;margin:22px 0 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{font-family:inherit;font-size:.78rem;padding:5px 11px;border-radius:2px;cursor:pointer;
+ border:1px solid var(--rule2);background:var(--surface);color:var(--ink2)}
+.chip[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);font-weight:500}
+.chip:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=search]{flex:1;min-width:170px;padding:6px 11px;border-radius:2px;
+ border:1px solid var(--rule2);background:var(--surface);color:var(--ink);
+ font-family:inherit;font-size:.82rem}
+.count{margin-left:auto;font-size:.72rem;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+h2.sec{font-family:"IBM Plex Serif",serif;font-size:1.28rem;font-weight:600;
+ margin:38px 0 4px;letter-spacing:-.01em}
+.secnote{color:var(--muted);font-size:.87rem;margin:0 0 14px;max-width:60ch}
+/* gate ladder: a real ordered sequence, so it is numbered and railed */
+.gate-group{position:relative;padding-left:44px;margin-top:18px}
+.gate-group::before{content:"";position:absolute;left:15px;top:6px;bottom:6px;
+ width:2px;background:linear-gradient(var(--gate),var(--rule))}
+.gate-num{position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;
+ display:grid;place-items:center;background:var(--gate-soft);color:var(--gate);
+ border:1.5px solid var(--gate);font-family:"IBM Plex Serif",serif;font-weight:600;font-size:.95rem}
+.gate-title{font-size:.86rem;color:var(--gate);font-weight:500;margin:6px 0 12px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+ box-shadow:var(--shadow);padding:20px 22px;margin:0 0 14px}
+.card.gate{border-left:3px solid var(--gate)}
+.q{font-family:"IBM Plex Serif",Georgia,serif;font-size:1.13rem;line-height:1.42;
+ font-weight:500;margin:0 0 10px;text-wrap:balance}
+.attr{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:12px}
+.persona{font-family:"IBM Plex Mono",monospace;font-size:.75rem;color:var(--accent);
+ background:var(--accent-soft);padding:2px 8px;border-radius:2px;
+ border:1px solid color-mix(in srgb,var(--accent) 28%,transparent)}
+.dimtag{font-family:"IBM Plex Mono",monospace;font-size:.67rem;letter-spacing:.09em;
+ text-transform:uppercase;color:var(--muted)}
+.principle{color:var(--ink2);font-size:.93rem;margin:0 0 14px}
+.field{margin-top:13px}
+.field .lbl{display:block;margin-bottom:5px}
+.field p{margin:0;font-size:.92rem;color:var(--ink2)}
+.evid{display:flex;flex-wrap:wrap;gap:5px}
+.evid span{font-family:"IBM Plex Mono",monospace;font-size:.71rem;padding:3px 8px;
+ border-radius:2px;background:var(--surface2);border:1px solid var(--rule);color:var(--ink2)}
+/* the field that matters most gets the only coloured rule in the card */
+.absence{border-left:2px solid var(--gate);padding-left:12px;background:var(--gate-soft);
+ padding:10px 12px;border-radius:0 2px 2px 0}
+.absence .lbl{color:var(--gate)}
+.absence p{color:var(--ink)}
+ul.tells{margin:0;padding-left:18px}
+ul.tells li{font-size:.89rem;color:var(--ink2);margin-bottom:3px}
+.src{margin-top:15px;padding-top:11px;border-top:1px solid var(--rule);
+ font-family:"IBM Plex Mono",monospace;font-size:.69rem;color:var(--muted);word-break:break-word}
+.fires{font-family:"IBM Plex Mono",monospace;font-size:.67rem;color:var(--gate);
+ letter-spacing:.06em;text-transform:uppercase}
+.empty{padding:40px 0;text-align:center;color:var(--muted)}
+footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--rule);
+ font-size:.83rem;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:560px){.wrap{padding:0 14px 70px}h1{font-size:1.6rem}
+ .gate-group{padding-left:34px}.gate-group::before{left:11px}
+ .gate-num{width:24px;height:24px;font-size:.8rem}.card{padding:16px}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="lbl">Persona question bank &middot; v0</div>
+  <h1>Discoverer Question Bank</h1>
+  <p class="sub">Questions 31 named drug discoverers would ask of a new indication &mdash;
+  used as the research agenda that builds the dossier, not as a critique of one that exists.</p>
+  <div class="stats">
+    <div class="stat"><b id="s-cards">0</b><span class="lbl">questions</span></div>
+    <div class="stat"><b id="s-gates">0</b><span class="lbl">kill gates</span></div>
+    <div class="stat"><b id="s-dims">0</b><span class="lbl">dimensions</span></div>
+    <div class="stat"><b id="s-people">0</b><span class="lbl">personas</span></div>
+  </div>
+  <p class="note"><b>Personas are reconstructions from public writing, not the people.</b>
+  Every card carries its source so any attribution can be checked &mdash; an unattributed
+  card is a generic checklist item and gets deleted. This v0 is hand-built from the
+  Grade&nbsp;A source manifest, before any crawling; it is a schema test, not a finished bank.</p>
+</header>
+
+<div class="controls">
+  <button class="chip" data-tag="" aria-pressed="true">All modalities</button>
+  <button class="chip" data-tag="oncology" aria-pressed="false">Oncology</button>
+  <button class="chip" data-tag="antibacterial" aria-pressed="false">Antibacterial</button>
+  <button class="chip" data-tag="genetic medicine" aria-pressed="false">Genetic medicine</button>
+  <button class="chip" data-tag="cell therapy" aria-pressed="false">Cell therapy</button>
+  <button class="chip" id="gatesOnly" aria-pressed="false">Gates only</button>
+  <input type="search" id="q" placeholder="Search question, persona, source&hellip;" aria-label="Search">
+  <span class="count" id="count"></span>
+</div>
+
+<main id="out"></main>
+
+<footer>
+  Generated from <span class="mono">dossier/questions.yaml</span> by
+  <span class="mono">dossier/build_page.py</span>. Editing the bank and re-running
+  regenerates this page.
+</footer>
+</div>
+
+<script id="bank" type="application/json">{"cards": [{"id": "causal-human-lof", "gate": 1, "dim": "causal", "dimLabel": "Causal human biology — is the mechanism real in people?", "q": "Is there a human loss-of-function (or gain-of-function) phenotype whose direction of effect matches what the drug is meant to do?", "persona": "Robert Plenge", "principle": "Human genetics is the only target-validation evidence that is already in the right species. Direction of effect matters as much as association.", "evidence": ["gnomAD", "Open Targets Genetics", "UK Biobank exome PheWAS", "ClinVar", "OMIM"], "good": "Homozygous or compound-het human LoF carriers described, with a phenotype in the intended direction, ideally an allelic series showing dose-response.", "absence": "Not fatal, but the program is now resting on model organisms. Say so explicitly and move the burden of proof to the models section.", "tells": ["mouse knockout offered as the human evidence", "GWAS association with no direction of effect", "the human LoF phenotype is known, inconvenient, and unmentioned"], "source": "plengegen.com — genetics-to-target series; NRDD target validation review", "fires": []}, {"id": "causal-outlier-humans", "gate": 1, "dim": "causal", "dimLabel": "Causal human biology — is the mechanism real in people?", "q": "Are there humans at the extremes of this phenotype, and has anyone sequenced them?", "persona": "Helen Hobbs", "principle": "Outliers carry the mechanism. The Dallas Heart Study method: find people at the tail, find what is different about them.", "evidence": ["Dallas Heart Study", "deCODE", "UK Biobank tails", "disease registries"], "good": "Protective or extreme-phenotype carriers with a named variant.", "absence": "A real gap and often a cheap one to close — an outlier-sequencing collaboration may be the highest-yield early experiment.", "tells": [], "source": "JCI &quot;A conversation with Helen Hobbs&quot;; PCSK9/ANGPTL3 work", "fires": []}, {"id": "precedent-tried-before", "gate": 2, "dim": "precedent", "dimLabel": "Precedent — has this been tried, and what happened?", "q": "Has this target, or this mechanism, been taken into humans before — and if it failed, do we know why it failed rather than that it failed?", "persona": "Derek Lowe", "principle": "Most &quot;novel&quot; targets have a graveyard. The failure reason is usually recoverable and usually decides whether the idea is dead or just early.", "evidence": ["ClinicalTrials.gov including terminated and withdrawn studies", "AdisInsight / Cortellis discontinued pipelines", "In the Pipeline archive", "conference abstracts that never became papers"], "good": "A named prior program, its phase, and a mechanistic cause of failure (exposure, safety, wrong patients, wrong endpoint) — not just &quot;it failed&quot;.", "absence": "Either genuinely new, or the search was too shallow. Assume the latter until a terminated-trial search has been run.", "tells": ["claims novelty without having searched terminated trials", "failure attributed to the company rather than the biology"], "source": "In the Pipeline, 2002–present, failure post-mortems", "fires": []}, {"id": "precedent-unpublished-negatives", "gate": 2, "dim": "precedent", "dimLabel": "Precedent — has this been tried, and what happened?", "q": "Who has already done this work and not published it, and can we just ask?", "persona": "Aled Edwards / Chas Bountra", "principle": "The field duplicates failed work continuously because negatives are invisible. Pre-competitive contact is cheaper than repeating it.", "evidence": ["SGC networks", "target-specific consortia", "patent filings without papers"], "good": "", "absence": "Not knowable from the literature. This is a phone-call task.", "tells": [], "source": "SGC Open Science Principles; Bountra talks on duplicated failure", "fires": []}, {"id": "tractable-modality-fit", "gate": 3, "dim": "tractable", "dimLabel": "Tractability — can a molecule do this, in the right tissue?", "q": "Given where this target sits and what it does, which modality can actually engage it — and is that modality one we can deliver to that tissue?", "persona": "Andrew Hopkins / Pieter Cullis", "principle": "Druggability is modality-relative. The question is not &quot;is it druggable&quot; but &quot;druggable by what, delivered how&quot;.", "evidence": ["structural data (PDB), pocket detection, chemical probe availability", "precedent for the modality reaching that tissue"], "good": "A named modality with a named delivery route and at least one precedent molecule reaching that compartment at a relevant exposure.", "absence": "The program is a delivery program before it is a target program. Budget accordingly.", "tells": ["names siRNA as the modality with no answer on tissue beyond liver", "CNS target with no discussion of BBB penetrance"], "source": "Hopkins ligand efficiency / druggable genome; Cullis LNP reviews", "fires": []}, {"id": "tractable-undruggable-recheck", "gate": null, "dim": "tractable", "dimLabel": "Tractability — can a molecule do this, in the right tissue?", "q": "If this is called undruggable — who decided that, when, and did they look for a cryptic or allosteric pocket, or only the orthosteric one?", "persona": "Kevan Shokat", "principle": "KRAS was undruggable until someone looked at a pocket that only opens in one mutant. &quot;Undruggable&quot; is usually a statement about past effort.", "evidence": ["MD simulations", "covalent fragment screens", "allosteric site literature"], "good": "", "absence": "An unexamined assumption worth an explicit re-check.", "tells": [], "source": "Shokat KRAS G12C switch-II work; NIH WALS lecture", "fires": []}, {"id": "models-predictive-validity", "gate": 4, "dim": "models", "dimLabel": "Model validity — will anything preclinical predict?", "q": "What is the predictive validity of the primary model — how well does it rank candidates against what happens in patients? Not its throughput.", "persona": "Jack Scannell", "principle": "Model validity dominates throughput in determining R&amp;D productivity. A cheap high-throughput model with poor validity destroys value.", "evidence": ["published concordance between this model and clinical outcome", "how many drugs that worked in this model worked in humans, and vice versa"], "good": "A quantified hit rate, even a poor one, with a citation.", "absence": "Very common and rarely admitted. If unquantified, treat every preclinical readout downstream as weaker than it appears and say so in the summary.", "tells": ["throughput, cost per well, or compounds screened offered as the answer", "&quot;it&#x27;s the standard model in the field&quot;"], "source": "NRDD Eroom&#x27;s Law (2012); &quot;Predictive validity in drug discovery&quot;", "fires": []}, {"id": "endpoints-measurable", "gate": 5, "dim": "endpoints", "dimLabel": "Endpoints — can the effect be detected in a feasible trial?", "q": "Is there an endpoint that moves on a timescale and in a population size we can actually run — and is it accepted, or will we have to qualify it?", "persona": "Mene Pangalos (&quot;right patient&quot;)", "principle": "The 5R framework treats patient and endpoint selection as a technical determinant of success, not a downstream clinical detail.", "evidence": ["precedent approvals in the indication and what endpoint they used", "FDA/EMA qualified biomarkers, natural history studies"], "good": "A precedent approval on the endpoint, or a biomarker with a regulatory qualification path and a natural-history dataset behind it.", "absence": "The trial is the program risk. A dossier that skips this is describing biology, not a drug program.", "tells": [], "source": "NRDD 2014 and 2018 5R papers", "fires": []}, {"id": "causal-brake-or-pedal", "gate": null, "dim": "causal", "dimLabel": "Causal human biology — is the mechanism real in people?", "q": "Is the thing we are modulating a brake or a pedal — and are we sure which direction of intervention produces the effect we want?", "persona": "James Allison", "principle": "CTLA-4 was assumed to be an accelerator. Recognising it as a brake is what made blockade the right intervention.", "evidence": ["perturbation data in both directions", "human variant direction of effect"], "good": "", "absence": "", "tells": [], "source": "Nobel lecture 2018; UC Berkeley CRL &quot;Story of Yervoy&quot;", "fires": []}, {"id": "causal-falsifiable", "gate": null, "dim": "causal", "dimLabel": "Causal human biology — is the mechanism real in people?", "q": "What observation would falsify this hypothesis — and are we running that experiment, or defending the hypothesis against it?", "persona": "John Hardy", "principle": "The amyloid hypothesis survived by being revised against contrary data. A hypothesis with no falsifying experiment is a commitment, not a theory.", "evidence": ["the contrary literature", "explicitly sought"], "good": "", "absence": "A red flag on the whole dossier, not on one section.", "tells": [], "source": "Hardy commentaries revising the amyloid cascade hypothesis", "fires": []}, {"id": "causal-worth-answering", "gate": null, "dim": "causal", "dimLabel": "Causal human biology — is the mechanism real in people?", "q": "If this works, what changes for patients — and is that change large enough to be worth the decade?", "persona": "Joseph Goldstein / Roy Vagelos", "principle": "Taste in problem selection. Goldstein&#x27;s Lasker essays are about which questions deserve a career; Vagelos ran Merck on whether a drug was needed.", "evidence": ["standard of care", "what patients actually get today"], "good": "", "absence": "", "tells": [], "source": "Goldstein Nature Medicine Lasker essay series; Vagelos memoir", "fires": []}, {"id": "tractable-ligandability", "gate": null, "dim": "tractable", "dimLabel": "Tractability — can a molecule do this, in the right tissue?", "q": "Has anyone got a fragment or a covalent hit on this protein, and at what ligand efficiency?", "persona": "Daniel Erlanson / Andrew Hopkins", "principle": "Fragment hit rate is an empirical readout of ligandability, available before a full screen.", "evidence": ["published fragment screens", "Practical Fragments archive", "covalent screens"], "good": "", "absence": "Untested rather than intractable — a cheap experiment.", "tells": [], "source": "Practical Fragments; ligand efficiency literature", "fires": []}, {"id": "tractable-degradation-alternative", "gate": null, "dim": "tractable", "dimLabel": "Tractability — can a molecule do this, in the right tissue?", "q": "If occupancy-based inhibition is hard here, is this a degradation, splice modulation, or genetic-medicine problem instead?", "persona": "Craig Crews / C. Frank Bennett", "principle": "Event-driven pharmacology removes the need for a deep binding pocket; splice modulation removes the need for a pocket at all.", "evidence": ["E3 ligase expression in target tissue", "ASO precedent", "splice-site variants"], "good": "", "absence": "", "tells": [], "source": "Crews PROTAC work; Bennett/Krainer nusinersen", "fires": []}, {"id": "tractable-pk-engineering", "gate": null, "dim": "tractable", "dimLabel": "Tractability — can a molecule do this, in the right tissue?", "q": "What half-life does the biology require, and is that an achievable engineering target rather than a hope?", "persona": "Lotte Bjerre Knudsen", "principle": "Liraglutide and semaglutide were half-life engineering programs. The required PK was treated as a design objective from the start.", "evidence": ["target turnover rate", "receptor occupancy modelling", "precedent PK"], "good": "", "absence": "", "tells": [], "source": "&quot;Inventing Liraglutide&quot;, ACS Pharmacol Transl Sci 2019", "fires": []}, {"id": "tractable-tissue-targeting", "gate": null, "dim": "tractable", "dimLabel": "Tractability — can a molecule do this, in the right tissue?", "q": "Can we make the molecule accumulate where the disease is rather than where the chemistry naturally goes?", "persona": "Michael J. Sofia", "principle": "Sofosbuvir was a liver-targeting problem solved with a phosphoramidate prodrug. Tissue targeting is a design variable, not a constraint.", "evidence": ["tissue distribution precedent", "prodrug/conjugate strategies", "GalNAc analogues"], "good": "", "absence": "", "tells": [], "source": "&quot;Enter Sofosbuvir: The Path to Curing HCV&quot; (Lasker essay, Cell 2016)", "fires": []}, {"id": "models-assay-artifacts", "gate": null, "dim": "models", "dimLabel": "Model validity — will anything preclinical predict?", "q": "Are the hits real, or are they aggregators, redox cyclers, or otherwise PAINS — and has anyone run the orthogonal assay?", "persona": "Jonathan Baell", "principle": "A large fraction of published hit matter is assay artifact. The cost of checking is trivial against the cost of not checking.", "evidence": ["PAINS filters", "orthogonal assay format", "dose-response shape", "detergent controls"], "good": "", "absence": "Treat the chemical series as unvalidated.", "tells": [], "source": "J Med Chem PAINS paper; Nature &quot;Chemistry: Chemical con artists&quot;", "fires": []}, {"id": "models-probe-quality", "gate": null, "dim": "models", "dimLabel": "Model validity — will anything preclinical predict?", "q": "Is the tool compound underpinning this biology actually selective at the concentration used?", "persona": "Paul Workman", "principle": "A large body of target biology rests on poor chemical probes used above their selectivity window.", "evidence": ["Chemical Probes Portal", "selectivity panels", "concentration used in key papers"], "good": "", "absence": "The supporting biology is weaker than the citation count suggests.", "tells": [], "source": "The Drug Discoverer blog (ICR); Chemical Probes Portal fitness factors", "fires": []}, {"id": "models-evidence-standard", "gate": null, "dim": "models", "dimLabel": "Model validity — will anything preclinical predict?", "q": "For each load-bearing claim in this dossier — is it a house of brick or a mansion of straw?", "persona": "William Kaelin Jr.", "principle": "Papers have drifted toward many weakly-supported claims. Ask which single claims the program depends on, and whether each is independently solid.", "evidence": ["replication status", "independent labs", "orthogonal methods"], "good": "", "absence": "", "tells": [], "source": "&quot;Publish houses of brick, not mansions of straw&quot;, Nature 545:387 (2017)", "fires": []}, {"id": "patients-natural-history", "gate": null, "dim": "patients", "dimLabel": "Patients and natural history — who exactly, progressing how?", "q": "Do we know how untreated patients progress, quantitatively, with enough resolution to power a trial?", "persona": "Mene Pangalos (&quot;right patient&quot;)", "principle": "", "evidence": ["natural history studies", "registries", "patient organisation datasets"], "good": "", "absence": "A natural-history study may be a prerequisite deliverable and should be costed into the program, not assumed.", "tells": [], "source": "5R framework", "fires": []}, {"id": "patients-stratification", "gate": null, "dim": "patients", "dimLabel": "Patients and natural history — who exactly, progressing how?", "q": "Which subset responds — and can we identify them prospectively with an assay that exists today?", "persona": "Charles Sawyers / Brian Druker", "principle": "Imatinib worked because the population was defined by the lesion. An unstratified trial in a heterogeneous population buries a real effect.", "evidence": ["genotype-phenotype data", "companion diagnostic precedent"], "good": "", "absence": "", "tells": [], "source": "Druker/Sawyers CML and prostate programs", "fires": []}, {"id": "patients-community", "gate": null, "dim": "patients", "dimLabel": "Patients and natural history — who exactly, progressing how?", "q": "Is there an organised patient community, and have we asked them what outcome they actually want changed?", "persona": "Stanley Crooke", "principle": "n-Lorem exists because the patients defined the need. Patient organisations also hold natural-history data and trial-ready cohorts.", "evidence": ["patient advocacy organisations", "registries", "existing natural history efforts"], "good": "", "absence": "", "tells": [], "source": "n-Lorem Foundation; Crooke&#x27;s own podcast series", "fires": []}, {"id": "endpoints-biomarker-chain", "gate": null, "dim": "endpoints", "dimLabel": "Endpoints — can the effect be detected in a feasible trial?", "q": "Is there a biomarker that connects target engagement to clinical benefit — and is each link in that chain evidenced separately?", "persona": "Paul Negulescu", "principle": "CF had sweat chloride: a biomarker tied to the mechanism that moved early and predicted benefit. Most indications do not, and pretend otherwise.", "evidence": ["target engagement assay", "mechanistic biomarker", "clinical correlate"], "good": "", "absence": "Every early trial becomes an outcome trial. This changes cost and duration by an order of magnitude — state it in the summary, not a footnote.", "tells": [], "source": "Vertex CFTR program; Lasker 2025", "fires": []}, {"id": "safety-lof-humans-again", "gate": null, "dim": "safety", "dimLabel": "Safety and window — what breaks, and at what exposure?", "q": "What is the phenotype of humans who already lack this target — that is our best available safety readout, pre-clinically.", "persona": "Robert Plenge / Helen Hobbs", "principle": "Human LoF carriers are a natural safety experiment already run.", "evidence": ["gnomAD constraint", "LoF carrier phenotypes", "PheWAS on the variant"], "good": "", "absence": "", "tells": [], "source": "genetics-for-target-validation literature", "fires": []}, {"id": "safety-on-target-window", "gate": null, "dim": "safety", "dimLabel": "Safety and window — what breaks, and at what exposure?", "q": "Is the toxicity we should fear on-target or off-target — and if on-target, what separates therapeutic from toxic exposure?", "persona": "Derek Lowe", "principle": "On-target toxicity does not go away with a better molecule. It is a property of the idea, not the chemistry.", "evidence": ["target expression atlas", "tissue distribution", "precedent class effects"], "good": "", "absence": "", "tells": [], "source": "In the Pipeline, recurring theme across mechanism-toxicity posts", "fires": []}, {"id": "safety-resistance", "gate": null, "dim": "safety", "dimLabel": "Safety and window — what breaks, and at what exposure?", "q": "How will resistance or escape emerge, and what is the second-generation plan?", "persona": "Charles Sawyers", "principle": "Resistance is a design input, not a post-approval surprise. Four distinct enzalutamide-resistance mechanisms were mapped by the same lab.", "evidence": ["precedent resistance in class", "mutational scanning", "relapse sequencing plans"], "good": "", "absence": "", "tells": [], "source": "Sawyers resistance work, MSK", "fires": ["oncology", "anti-infective", "antiviral"]}, {"id": "safety-permeability-efflux", "gate": null, "dim": "safety", "dimLabel": "Safety and window — what breaks, and at what exposure?", "q": "For a Gram-negative target — do we have any compound series that gets in and stays in?", "persona": "Lynn Silver", "principle": "Antibacterial discovery fails at permeability and efflux more than at target biology. Screening cascades that ignore this generate dead series.", "evidence": ["accumulation assays", "eNTRy rules", "efflux-deficient strain comparisons"], "good": "", "absence": "Expect the series to fail late. Front-load the accumulation assay.", "tells": [], "source": "Silver, &quot;Challenges of antibacterial discovery&quot;, Clin Microbiol Rev", "fires": ["antibacterial"]}, {"id": "competition-white-space", "gate": null, "dim": "competition", "dimLabel": "Competitive position — who else, and why the gap?", "q": "Who else is working on this, how far ahead are they, and what would we have that they do not?", "persona": "Bruce Booth", "principle": "", "evidence": ["ClinicalTrials.gov", "patent landscape", "company pipelines", "conference abstracts"], "good": "", "absence": "", "tells": ["competitor list drawn only from press releases", "claims to be first without a patent search"], "source": "LifeSciVC, on therapeutic crowding", "fires": []}, {"id": "competition-why-gap", "gate": null, "dim": "competition", "dimLabel": "Competitive position — who else, and why the gap?", "q": "If this is such a good idea, why has nobody done it? Name the specific barrier, and say what changed to remove it.", "persona": "Bruce Booth / Jack Scannell", "principle": "There is usually a reason. A new enabling technology, a new dataset, or a genuine blind spot — but it should be nameable.", "evidence": [], "good": "", "absence": "The most common failure mode in an indication dossier.", "tells": [], "source": "LifeSciVC; R&amp;D productivity literature", "fires": []}, {"id": "execution-durability", "gate": null, "dim": "execution", "dimLabel": "Execution — CMC, durability, manufacturability, cost", "q": "For a one-shot genetic medicine — how long does the effect last, can it be redosed, and what does pre-existing immunity do to eligibility?", "persona": "Katherine High / Fyodor Urnov", "principle": "", "evidence": ["AAV serostatus prevalence", "durability data in class", "redosing precedent"], "good": "", "absence": "", "tells": [], "source": "Spark/AskBio gene therapy programs; IGI translational work", "fires": ["gene therapy", "gene editing"]}, {"id": "execution-manufacturing", "gate": null, "dim": "execution", "dimLabel": "Execution — CMC, durability, manufacturability, cost", "q": "Can this be made at the scale and cost the indication requires, and is the process a research process or a manufacturable one?", "persona": "Carl June / Steven Rosenberg", "principle": "", "evidence": ["COGS precedent in class", "vein-to-vein time", "CMC precedent"], "good": "", "absence": "", "tells": [], "source": "CAR-T manufacturing experience at Penn and NCI", "fires": ["cell therapy", "biologics", "genetic medicine"]}, {"id": "decision-cheapest-killer", "gate": null, "dim": "decision", "dimLabel": "Decision economics — what would change our mind, cheapest first", "q": "What is the cheapest experiment that could kill this program, and why have we not run it yet?", "persona": "Bruce Booth / Bernard Munos", "principle": "Capital efficiency in early biotech is mostly about sequencing the killer experiments first rather than the encouraging ones.", "evidence": [], "good": "", "absence": "If no experiment could kill it, the hypothesis is not falsifiable and the dossier is advocacy.", "tells": [], "source": "LifeSciVC on staged investment; Munos on R&amp;D productivity", "fires": []}, {"id": "decision-what-must-be-true", "gate": null, "dim": "decision", "dimLabel": "Decision economics — what would change our mind, cheapest first", "q": "List the things that must all be true for this to work. Which is the weakest, and what is its probability?", "persona": "Mene Pangalos", "principle": "The 5R framework is a conjunction, not a scorecard. The program&#x27;s probability is bounded by its weakest R.", "evidence": ["each preceding dimension", "scored"], "good": "", "absence": "", "tells": [], "source": "NRDD 2014/2018", "fires": []}, {"id": "decision-consensus-risk", "gate": null, "dim": "decision", "dimLabel": "Decision economics — what would change our mind, cheapest first", "q": "If the field disagrees with us, is that because we are early or because we are wrong — and what evidence would distinguish those?", "persona": "Judah Folkman", "principle": "Angiogenesis was right and unpopular for two decades. The same posture also protects bad ideas, so the distinguishing evidence has to be named.", "evidence": [], "good": "", "absence": "", "tells": [], "source": "Folkman&#x27;s angiogenesis work; &quot;Dr. Folkman&#x27;s War&quot;", "fires": []}], "dimensions": {"causal": "Causal human biology — is the mechanism real in people?", "precedent": "Precedent — has this been tried, and what happened?", "tractable": "Tractability — can a molecule do this, in the right tissue?", "models": "Model validity — will anything preclinical predict?", "patients": "Patients and natural history — who exactly, progressing how?", "endpoints": "Endpoints — can the effect be detected in a feasible trial?", "safety": "Safety and window — what breaks, and at what exposure?", "competition": "Competitive position — who else, and why the gap?", "execution": "Execution — CMC, durability, manufacturability, cost", "decision": "Decision economics — what would change our mind, cheapest first"}, "tree": {"anti-infective": ["antibacterial", "antiviral", "antifungal", "antiparasitic"], "genetic medicine": ["gene therapy", "gene editing", "aso", "sirna", "mrna"], "biologics": ["antibody", "enzyme replacement", "peptide"], "cell therapy": ["car-t", "til"], "small molecule": ["covalent", "degrader", "fragment-derived"]}}</script>
+<script>
+(function(){
+"use strict";
+var B=JSON.parse(document.getElementById("bank").textContent);
+var CARDS=B.cards, DIMS=B.dimensions, TREE=B.tree;
+var tag="", gatesOnly=false, query="";
+
+function norm(s){return s.trim().toLowerCase().replace(/[_-]/g," ");}
+function close(tags){
+  var kids={},parents={};
+  Object.keys(TREE||{}).forEach(function(p){
+    kids[norm(p)]=(TREE[p]||[]).map(norm);
+    kids[norm(p)].forEach(function(c){parents[c]=norm(p);});
+  });
+  var out={};
+  tags.map(norm).forEach(function(t){
+    out[t]=1;(kids[t]||[]).forEach(function(k){out[k]=1;});
+    while(parents[t]){t=parents[t];out[t]=1;}
+  });
+  return out;
+}
+function fires(c){
+  if(!c.fires||!c.fires.length) return true;
+  if(!tag) return true;
+  var a=close(c.fires), b=close([tag]);
+  return Object.keys(a).some(function(k){return b[k];});
+}
+function matches(c){
+  if(gatesOnly && !c.gate) return false;
+  if(!fires(c)) return false;
+  if(!query) return true;
+  var hay=(c.q+" "+c.persona+" "+c.source+" "+c.principle+" "+c.dimLabel).toLowerCase();
+  return hay.indexOf(query)>-1;
+}
+function el(t,cls,txt){var e=document.createElement(t);if(cls)e.className=cls;
+  if(txt!==undefined)e.innerHTML=txt;return e;}
+
+function card(c){
+  var d=el("div","card"+(c.gate?" gate":""));
+  d.appendChild(el("p","q",c.q));
+  var attr=el("div","attr");
+  attr.appendChild(el("span","persona",c.persona));
+  attr.appendChild(el("span","dimtag",c.dim.replace("_"," ")));
+  if(c.fires.length) attr.appendChild(el("span","fires","fires: "+c.fires.join(" / ")));
+  d.appendChild(attr);
+  if(c.principle) d.appendChild(el("p","principle",c.principle));
+  if(c.evidence.length){
+    var f=el("div","field");f.appendChild(el("span","lbl","Where to look"));
+    var ev=el("div","evid");
+    c.evidence.forEach(function(e){ev.appendChild(el("span",null,e));});
+    f.appendChild(ev);d.appendChild(f);
+  }
+  if(c.good){var f2=el("div","field");f2.appendChild(el("span","lbl","What would count"));
+    f2.appendChild(el("p",null,c.good));d.appendChild(f2);}
+  if(c.absence){var f3=el("div","field absence");
+    f3.appendChild(el("span","lbl","If nothing is found"));
+    f3.appendChild(el("p",null,c.absence));d.appendChild(f3);}
+  if(c.tells.length){var f4=el("div","field");
+    f4.appendChild(el("span","lbl","Weak-answer tells"));
+    var ul=el("ul","tells");
+    c.tells.forEach(function(t){ul.appendChild(el("li",null,t));});
+    f4.appendChild(ul);d.appendChild(f4);}
+  d.appendChild(el("div","src","source: "+c.source));
+  return d;
+}
+
+function render(){
+  var out=document.getElementById("out");out.textContent="";
+  var vis=CARDS.filter(matches);
+  document.getElementById("count").textContent=vis.length+" of "+CARDS.length+" shown";
+
+  var gates=vis.filter(function(c){return c.gate;});
+  if(gates.length){
+    out.appendChild(el("h2","sec","Kill gates"));
+    out.appendChild(el("p","secnote","Answered in order, cheapest disqualifying question first. Abandoning at a gate is a successful outcome &mdash; the ordering exists so a dead indication costs a day instead of a quarter."));
+    var nums=[];gates.forEach(function(c){if(nums.indexOf(c.gate)<0)nums.push(c.gate);});
+    nums.sort(function(a,b){return a-b;}).forEach(function(n){
+      var g=el("div","gate-group");
+      g.appendChild(el("div","gate-num",String(n)));
+      var inGate=gates.filter(function(c){return c.gate===n;});
+      g.appendChild(el("div","gate-title",inGate[0].dimLabel));
+      inGate.forEach(function(c){g.appendChild(card(c));});
+      out.appendChild(g);
+    });
+  }
+  var body=vis.filter(function(c){return !c.gate;});
+  if(body.length){
+    out.appendChild(el("h2","sec","Dossier body"));
+    out.appendChild(el("p","secnote","Grouped by dimension. Each becomes a section of the dossier, with its evidence and confidence filled in &mdash; or an explicit statement that nothing was found."));
+    Object.keys(DIMS).forEach(function(k){
+      var grp=body.filter(function(c){return c.dim===k;});
+      if(!grp.length) return;
+      var h=el("h2","sec",DIMS[k]);h.style.fontSize="1.05rem";out.appendChild(h);
+      grp.forEach(function(c){out.appendChild(card(c));});
+    });
+  }
+  if(!vis.length) out.appendChild(el("div","empty","No questions match that filter."));
+}
+
+document.querySelectorAll(".chip[data-tag]").forEach(function(b){
+  b.addEventListener("click",function(){
+    tag=b.dataset.tag;
+    document.querySelectorAll(".chip[data-tag]").forEach(function(o){
+      o.setAttribute("aria-pressed",String(o===b));});
+    render();
+  });
+});
+document.getElementById("gatesOnly").addEventListener("click",function(){
+  gatesOnly=!gatesOnly;this.setAttribute("aria-pressed",String(gatesOnly));render();
+});
+document.getElementById("q").addEventListener("input",function(){
+  query=this.value.trim().toLowerCase();render();
+});
+
+document.getElementById("s-cards").textContent=CARDS.length;
+document.getElementById("s-gates").textContent=
+  Object.keys(CARDS.reduce(function(a,c){if(c.gate)a[c.gate]=1;return a;},{})).length;
+document.getElementById("s-dims").textContent=Object.keys(DIMS).length;
+document.getElementById("s-people").textContent=
+  Object.keys(CARDS.reduce(function(a,c){a[c.persona]=1;return a;},{})).length;
+render();
+})();
+</script>
