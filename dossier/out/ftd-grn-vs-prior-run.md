@@ -28,22 +28,24 @@ Specific things the prior run had that I missed entirely:
 | Modality-level HHI 0.333 vs a 0.35 blocked threshold; in-licensing vs de-novo IP asymmetry | Wave 2 |
 | Three costed options with front-end critical paths (21/30/42, 15/22/30, 27/45/58 months) | Wave 2 CMC ×3 |
 
-The threshold row is the sharpest rebuke. My memo asserted that "nobody appears
-to have written down how much progranulin, in which compartment, is enough" and
-proposed assembling that curve as an opportunity. The prior run had the number a
-week earlier. That is what an un-anchored dive does: it mistakes its own
-retrieval limit for a gap in the field.
+### Two mistakes worth naming
 
-I also had a scope error. The prior run **froze the indication as symptomatic
-FTD-GRN**, explicitly excluding presymptomatic carriers (a prevention endpoint
-does not fit the 24-month envelope) and excluding biallelic CLN11 entirely. My
-Gate 1 leaned on the CLN11 allelic series and my Gate 5 leaned on presymptomatic
-carriers — both outside the frozen stratum. The reasoning is not wrong, but it
-answers a question that was already closed.
+**I reported a gap that wasn't there.** This memo said nobody has established how
+much progranulin a patient actually needs, and proposed working that out as an
+opportunity. The prior run already had the number: 3.43 ng/mL in spinal fluid,
+from a comparison of 3,301 people. I missed it because my searching was shallow,
+then described my own blind spot as a hole in the field. That is the
+characteristic failure of a research pass that is not anchored to what is already
+known — when you cannot find something, you cannot tell whether it does not exist
+or whether you simply did not reach it.
 
-And the prior run reached my central Gate 2 conclusion first, and put it better:
-*"Plasma PGRN is not available as a surrogate here — it is available as a
-counterexample."*
+**I answered a question that had already been closed.** The prior run
+deliberately narrowed the population to patients who already have symptoms, and
+excluded two groups on purpose: people who inherit two broken copies of the gene,
+who get a different disease altogether (CLN11), and carriers who have not become
+ill yet — because proving a drug prevents illness takes longer than the project's
+time budget allows. Two of my five gates lean on exactly those excluded groups.
+The reasoning is not wrong; it just answers a question that was already settled.
 
 ## Where the question bank contributed something
 
