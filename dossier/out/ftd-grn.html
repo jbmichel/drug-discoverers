@@ -1,0 +1,268 @@
+<title>FTD-GRN Decision Memo</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500;600&display=swap">
+<style>
+:root{
+ --ground:#EEF1F0;--surface:#FFF;--surface2:#F6F8F7;
+ --ink:#141F1E;--ink2:#394B49;--muted:#5F706E;
+ --rule:#D7DEDC;--rule2:#BFCAC8;
+ --accent:#1B4D4B;--accent-soft:#E2EDEB;
+ --gate:#9B3A22;--gate-soft:#F7E7E1;
+ --hyp:#7A5B12;--hyp-soft:#F6EEDA;
+ --shadow:0 1px 2px rgba(20,31,30,.05),0 10px 26px -14px rgba(20,31,30,.22);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --ground:#0A1211;--surface:#121C1B;--surface2:#172221;
+ --ink:#E7EDEB;--ink2:#BCC9C7;--muted:#83958F;
+ --rule:#223130;--rule2:#324644;
+ --accent:#63B3AA;--accent-soft:#10302E;
+ --gate:#DD8163;--gate-soft:#331812;
+ --hyp:#D6B368;--hyp-soft:#2C240F;
+ --shadow:0 1px 2px rgba(0,0,0,.45),0 12px 30px -16px rgba(0,0,0,.8);
+}}
+:root[data-theme="dark"]{
+ --ground:#0A1211;--surface:#121C1B;--surface2:#172221;
+ --ink:#E7EDEB;--ink2:#BCC9C7;--muted:#83958F;
+ --rule:#223130;--rule2:#324644;
+ --accent:#63B3AA;--accent-soft:#10302E;
+ --gate:#DD8163;--gate-soft:#331812;
+ --hyp:#D6B368;--hyp-soft:#2C240F;
+ --shadow:0 1px 2px rgba(0,0,0,.45),0 12px 30px -16px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+ font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.62;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:40px 20px 90px}
+.lbl{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.67rem;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-weight:600;font-size:2rem;
+ margin:6px 0 6px;letter-spacing:-.018em;text-wrap:balance}
+.deck{color:var(--ink2);max-width:60ch;margin:0}
+h2{font-family:"IBM Plex Serif",serif;font-size:1.3rem;font-weight:600;
+ margin:44px 0 10px;letter-spacing:-.01em;padding-bottom:7px;border-bottom:1px solid var(--rule)}
+h3{font-family:"IBM Plex Serif",serif;font-size:1.02rem;font-weight:600;margin:24px 0 6px}
+p{margin:0 0 13px}
+/* identifiers: anchored claims should be visible as anchored */
+code{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--accent);
+ background:var(--accent-soft);padding:1px 6px;border-radius:2px;white-space:nowrap}
+.banner{margin:22px 0 0;padding:14px 16px;border-left:3px solid var(--gate);
+ background:var(--gate-soft);border-radius:0 2px 2px 0;font-size:.9rem}
+.banner b{color:var(--gate)}
+.verdict{margin:20px 0 0;padding:22px 24px;background:var(--surface);
+ border:1px solid var(--rule);border-left:3px solid var(--accent);
+ border-radius:0 3px 3px 0;box-shadow:var(--shadow)}
+.verdict .lead{font-family:"IBM Plex Serif",serif;font-size:1.24rem;line-height:1.4;
+ font-weight:600;margin:0 0 12px;text-wrap:balance}
+.hyp{border-left:2px solid var(--hyp);background:var(--hyp-soft);
+ padding:12px 15px;border-radius:0 2px 2px 0;margin:0 0 13px;font-size:.92rem}
+.hyp .lbl{color:var(--hyp);display:block;margin-bottom:5px}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin:6px 0 16px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:"IBM Plex Mono",monospace;font-size:.65rem;letter-spacing:.11em;
+ text-transform:uppercase;color:var(--muted);font-weight:400}
+td.s{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.s1{color:var(--gate);font-weight:500}.s3{color:var(--accent);font-weight:500}
+/* gate ladder mirrors the question bank's device */
+.gate{position:relative;padding-left:42px;margin:20px 0}
+.gate::before{content:"";position:absolute;left:14px;top:30px;bottom:-20px;width:2px;background:var(--rule)}
+.gate:last-of-type::before{display:none}
+.gnum{position:absolute;left:0;top:-2px;width:30px;height:30px;border-radius:50%;
+ display:grid;place-items:center;background:var(--gate-soft);color:var(--gate);
+ border:1.5px solid var(--gate);font-family:"IBM Plex Serif",serif;font-weight:600;font-size:.9rem}
+.gate h3{margin-top:0}
+.pass{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.1em;
+ text-transform:uppercase;padding:2px 7px;border-radius:2px;margin-left:8px;
+ border:1px solid currentColor}
+.pass.ok{color:var(--accent);background:var(--accent-soft)}
+.pass.weak{color:var(--gate);background:var(--gate-soft)}
+.cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));margin:6px 0 0}
+.col{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:18px 20px}
+.col.miss{border-top:3px solid var(--gate)}
+.col.add{border-top:3px solid var(--accent)}
+.col h3{margin:0 0 8px;font-size:.98rem}
+.col ul{margin:0;padding-left:17px}
+.col li{font-size:.88rem;color:var(--ink2);margin-bottom:7px}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);
+ font-size:.8rem;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:560px){.wrap{padding:26px 14px 60px}h1{font-size:1.62rem}
+ .gate{padding-left:32px}.gate::before{left:10px}.gnum{width:23px;height:23px;font-size:.76rem}}
+</style>
+
+<div class="wrap">
+  <div class="lbl">Indication dive &middot; question-bank driven &middot; 2026-09-03</div>
+  <h1>FTD-GRN: progranulin haploinsufficiency</h1>
+  <p class="deck">First end-to-end run of the persona question bank through the
+  rare-disease dive. Five kill gates worked in order; none scored zero, so the
+  dive completed.</p>
+
+  <div class="banner">
+    <b>Superseded in part.</b> A prior orchestrated run exists at
+    <code>rare-disease-program-verdict</code> &rarr; <code>runs/FTD-GRN-2026-08</code>
+    (waves 1&ndash;2, 201 gated evidence rows, 0.78 measured). It is ahead of this
+    dive on retrieval, provenance and scope. The comparison at the bottom is the
+    more useful half of this page.
+  </div>
+
+  <div class="verdict">
+    <p class="lead">Do not enter on target validation. The target is validated and
+    that is no longer the question.</p>
+    <p>The naive form of this program &mdash; raise progranulin, slow the disease
+    &mdash; has been tested to completion and failed. Latozinemab's 96-week Phase 3
+    <code>NCT04374136</code> missed its clinical co-primary while <em>hitting</em> its
+    biomarker co-primary, raising plasma progranulin 165% over placebo at week 96,
+    with no treatment-related effect on any secondary including fluid biomarkers and
+    volumetric MRI. Alector cut 49% of staff and discontinued the extension; GSK
+    leaves the alliance at the start of 2027.</p>
+    <p>That is a clean, well-powered, <em>interpretable</em> failure &mdash; the most
+    valuable fact available about this indication. It does not say progranulin is the
+    wrong target. It says this route, at this magnitude, in this compartment, does not
+    change the disease. Three companies are already asking the narrower question with
+    direct CNS delivery. Entry now is a fast-follow, and is only justified on an
+    explicit delivery-or-durability thesis.</p>
+  </div>
+
+  <h2>Criterion scorecard</h2>
+  <table>
+    <thead><tr><th>Criterion</th><th>Score</th><th>Reasoning</th></tr></thead>
+    <tbody>
+      <tr><td>Causal human genetics</td><td class="s s3">3 / 3</td><td>Allelic series with direction of effect.</td></tr>
+      <tr><td>Effector feasibility (CNS)</td><td class="s">2 / 3</td><td>CSF progranulin elevation shown by three modalities. Distribution unproven.</td></tr>
+      <tr><td>Unmet need / competition</td><td class="s s1">1 / 3</td><td>Four active programmes, four sponsors, no approval, no active Phase 3.</td></tr>
+      <tr><td>Mechanism &amp; model validity</td><td class="s s1">1 / 3</td><td>Models predicted engagement, not benefit.</td></tr>
+      <tr><td>Endpoints</td><td class="s s1">1 / 3</td><td>Accepted endpoint exists; a powered Phase 3 could not move it.</td></tr>
+    </tbody>
+  </table>
+  <p>Two scores of 1 are where the adjacent score changes the verdict. Both are
+  escalations, not resolutions: does an in-clinic competitor end the inquiry, and
+  is a biomarker path acceptable while NfL qualification is still in progress?</p>
+
+  <h2>The gates</h2>
+
+  <div class="gate"><div class="gnum">1</div>
+    <h3>Causal human biology <span class="pass ok">pass, strongly</span></h3>
+    <p><em>Plenge; Hobbs.</em> A genuine human allelic series. Heterozygous loss of
+    function causes FTLD with TDP-43 inclusions; homozygous loss causes a different
+    disease, neuronal ceroid lipofuscinosis type 11 <code>OMIM #614706</code>.
+    Direction of effect is unambiguous. Two refinements cut against treating it as a
+    simple dose curve: homozygotes lack the TDP-43 inclusions that define the
+    heterozygous disease, and the homozygous phenotype is itself split between
+    juvenile CLN11 and a post-50 FTD-parkinsonism presentation.</p>
+    <p>Hobbs's outlier question is half-answered. The biallelic extreme is described;
+    the other tail &mdash; heterozygotes who convert late or not at all, across an
+    onset range of 40 to 85 &mdash; is where modifiers must live, and no systematic
+    study of it surfaced. GENFI and ALLFTD already hold those cohorts.</p>
+  </div>
+
+  <div class="gate"><div class="gnum">2</div>
+    <h3>Precedent <span class="pass ok">pass &mdash; the gate that matters</span></h3>
+    <p><em>Lowe; Edwards/Bountra.</em> Lowe's question is whether we know <em>why</em>
+    it failed rather than <em>that</em> it failed. Here we do, because the trial
+    carried a biomarker co-primary alongside the clinical one, which makes the failure
+    interpretable rather than ambiguous.</p>
+    <p>The pharmacology worked. In healthy volunteers a single infusion tripled plasma
+    progranulin and <em>doubled CSF progranulin</em>; in cynomolgus monkeys both rose
+    two- to three-fold. So this is not a drug that failed to reach the brain. It
+    reached the CSF, roughly doubled progranulin there, and the disease did not
+    respond on any measure. Two hypotheses survive: insufficient magnitude, or the
+    compartment problem below.</p>
+    <div class="hyp"><span class="lbl">Hypothesis — not retrieved from any source</span>
+    Sortilin is a principal route for progranulin <em>uptake</em> into cells and
+    delivery to the lysosome, where its known functions are exercised. Blocking
+    sortilin raises measured extracellular progranulin partly <em>by preventing that
+    uptake</em>. If so, the biomarker that was hit and the effect that was wanted are
+    in tension, and plasma progranulin is a target-engagement marker for sortilin
+    blockade rather than a surrogate for intracellular sufficiency. Falsifiable: did
+    intracellular or lysosomal progranulin rise under latozinemab, and does
+    sortilin-independent uptake carry enough flux to compensate? This decides whether
+    the failure reads across to <code>NCT06705192</code>, which is also
+    sortilin-directed.</div>
+  </div>
+
+  <div class="gate"><div class="gnum">3</div>
+    <h3>Tractability and delivery <span class="pass ok">pass</span></h3>
+    <p><em>Hopkins; Cullis.</em> Three modalities have raised progranulin in the human
+    CNS: AVB-101 (AAV, intrathalamic; 12 patients dosed, fourth cohort from March
+    2026), PBFT02 (AAV, intra-cisterna magna; CSF progranulin 22.8&nbsp;ng/mL at 12
+    months on dose 1), and DNL593 (BBB transport vehicle; 40 enrolled, readout end
+    2026). The delivery question is answered for the measurable compartment and open
+    for distribution &mdash; the same gap Gate 2 opened, arriving from the other side.</p>
+  </div>
+
+  <div class="gate"><div class="gnum">4</div>
+    <h3>Model predictive validity <span class="pass weak">weak &mdash; weakest gate</span></h3>
+    <p><em>Scannell.</em> The preclinical package predicted target engagement
+    accurately and clinical outcome not at all. A model that forecasts your biomarker
+    but not your endpoint generates confidence without generating information.</p>
+    <p>The reason is visible in the model ecosystem: the genotype matching the human
+    disease is Grn+/-, reported to be nearly phenotype-free, so the field works in
+    Grn&minus;/&minus; &mdash; which is the genotype of CLN11, a disease Gate 1 says is
+    pathologically distinct. The workhorse model may be a model of the sibling disease.
+    No published concordance analysis between any GRN model and clinical outcome
+    surfaced.</p>
+  </div>
+
+  <div class="gate"><div class="gnum">5</div>
+    <h3>Endpoints <span class="pass weak">weak pass</span></h3>
+    <p><em>Pangalos.</em> An accepted endpoint exists &mdash; CDR plus NACC FTLD-SB
+    &mdash; and a 96-week multi-continent Phase 3 could not move it. NfL is better
+    characterised in this population than in most: GRN carriers run an order of
+    magnitude above non-carriers a decade before onset, and the Bluefield surveillance
+    programme is measuring it quarterly in 335+ carriers to qualify it for Phase 3.
+    That is a qualification effort in progress, not a qualified endpoint.</p>
+    <p>Passage Bio's interim data claim movement on exactly what latozinemab could not
+    move &mdash; 64% less whole-brain atrophy and stabilised plasma NfL versus ALLFTD
+    natural history. But those are external comparisons in a small early cohort
+    selected for early disease, and FDA has told them a randomised registrational
+    trial is required.</p>
+  </div>
+
+  <h2>Did the question bank add anything?</h2>
+  <p>This is the question worth answering, and the honest answer is: much less than
+  the memo's length implies, and not where I expected.</p>
+
+  <div class="cols">
+    <div class="col miss">
+      <h3>Already in the prior run — missed here</h3>
+      <ul>
+        <li><b>Prevail/Lilly LY3884963</b> <code>NCT04408625</code> — an entire third AAV-GRN sponsor</li>
+        <li><b>AZP2006 / ezeprogind</b> — five years stranded, oral progranulin-raiser on the prosaposin complex, with <code>absence_claimable: yes</code></li>
+        <li><b>The threshold</b> — CSF 3.43 ng/mL and plasma 74.8 ng/mL separate carriers from non-carriers, n=3301</li>
+        <li>NCT identifiers for every competitor; INFRONT-3 n=119; modality HHI 0.333 against a 0.35 blocked threshold; three costed options with critical paths</li>
+      </ul>
+    </div>
+    <div class="col add">
+      <h3>What survived the comparison</h3>
+      <ul>
+        <li><b>Scannell's gate is missing from the specialist set.</b> 201 ledger rows, two mention mouse models. No contract asks whether the model predicts clinical outcome. Structural gap, not a retrieval gap — deeper searching cannot surface it.</li>
+        <li><b>Sortilin read-across.</b> Both facts are in the ledger; no row connects them. Offered as hypothesis.</li>
+        <li><b>Stranded datasets, not just assets.</b> Alector holds unpublished Phase 3 CSF and vMRI data in this exact genotype and has stopped needing it.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p style="margin-top:18px">The threshold row is the sharpest rebuke. This memo
+  proposed "assemble the dose-response curve nobody has published" as an
+  opportunity. The prior run had the number a week earlier. That is what an
+  unanchored dive does &mdash; it mistakes its own retrieval limit for a gap in the
+  field. There was also a scope error: the prior run froze the stratum as
+  <em>symptomatic</em> FTD-GRN, excluding CLN11 and presymptomatic carriers, which
+  Gates 1 and 5 above both lean on.</p>
+
+  <h2>Recommendation</h2>
+  <p>Do not run the question bank as a parallel dive. Wire it into
+  <code>O.build_brief()</code> as criteria that generate specialist contracts: add a
+  <code>MODEL_VALIDITY</code> specialist carrying Scannell's question, extend
+  <code>UNLOCK_SCOUT</code> to stranded datasets, and feed the kill-gate ordering into
+  dispatch order &mdash; which addresses the prior run's own finding that an
+  option-set choice made before wave 1 returns can rest on a premise wave 1 destroys.</p>
+
+  <footer>
+    Evidence constraint: this session's egress blocks direct fetching (no PubMed,
+    ClinicalTrials.gov or gnomAD), so everything here is grounded in web
+    <em>search</em> returns rather than full text. No identifier on this page was
+    reconstructed from memory. The sortilin mechanism is labelled as hypothesis
+    because it is one.
+  </footer>
+</div>
