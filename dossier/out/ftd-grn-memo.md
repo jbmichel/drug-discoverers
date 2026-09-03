@@ -1,5 +1,16 @@
 # Decision memo — FTD-GRN (progranulin haploinsufficiency)
 
+> **STATUS: SUPERSEDED IN PART. Read `ftd-grn-vs-prior-run.md` first.**
+> A prior orchestrated run exists at `jbmichel/rare-disease-program-verdict` →
+> `runs/FTD-GRN-2026-08/` (waves 1–2, gated, 201 evidence rows, 2026-08-26/27)
+> and is ahead of this memo on retrieval, provenance and scope. It had the
+> quantitative CSF threshold this memo calls a gap, a third AAV-GRN sponsor and
+> a stranded asset this memo missed, and it froze the indication as *symptomatic*
+> FTD-GRN — excluding the CLN11 allelic series and the presymptomatic population
+> that Gates 1 and 5 below lean on. Retained for the two findings that survive
+> the comparison: the missing model-validity criterion, and the sortilin
+> read-across hypothesis.
+
 Dive driven by the persona question bank (`dossier/questions.yaml`, 33 cards),
 gates worked in kill order. Snapshot date 2026-09-03.
 
