@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drug Discoverers</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{
+ --ground:#EEF1F0;--surface:#FFF;--surface2:#F6F8F7;
+ --ink:#141F1E;--ink2:#394B49;--muted:#5F706E;
+ --rule:#D7DEDC;--rule2:#BFCAC8;
+ --accent:#1B4D4B;--accent-soft:#E2EDEB;
+ --shadow:0 1px 2px rgba(20,31,30,.05),0 10px 26px -14px rgba(20,31,30,.22);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --ground:#0A1211;--surface:#121C1B;--surface2:#172221;
+ --ink:#E7EDEB;--ink2:#BCC9C7;--muted:#83958F;
+ --rule:#223130;--rule2:#324644;
+ --accent:#63B3AA;--accent-soft:#10302E;
+ --shadow:0 1px 2px rgba(0,0,0,.45),0 12px 30px -16px rgba(0,0,0,.8);
+}}
+:root[data-theme="dark"]{
+ --ground:#0A1211;--surface:#121C1B;--surface2:#172221;
+ --ink:#E7EDEB;--ink2:#BCC9C7;--muted:#83958F;
+ --rule:#223130;--rule2:#324644;
+ --accent:#63B3AA;--accent-soft:#10302E;
+ --shadow:0 1px 2px rgba(0,0,0,.45),0 12px 30px -16px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+ font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.6;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:800px;margin:0 auto;padding:44px 20px 80px}
+.lbl{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.67rem;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:"IBM Plex Serif",Georgia,serif;font-weight:600;font-size:2rem;
+ margin:6px 0 8px;letter-spacing:-.015em}
+.sub{color:var(--ink2);max-width:62ch;margin:0 0 6px}
+.stats{display:flex;flex-wrap:wrap;gap:24px;margin:22px 0 0;padding:14px 0;
+ border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stat b{font-family:"IBM Plex Serif",serif;font-size:1.3rem;font-weight:600;
+ display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+h2{font-family:"IBM Plex Serif",serif;font-size:1.15rem;font-weight:600;margin:38px 0 12px}
+.tools{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+a.tool{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:inherit;
+ background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+ box-shadow:var(--shadow);padding:20px 22px;transition:border-color .12s,transform .12s}
+a.tool:hover{border-color:var(--accent);transform:translateY(-1px)}
+a.tool:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a.tool .name{font-family:"IBM Plex Serif",serif;font-size:1.12rem;font-weight:600;color:var(--accent)}
+a.tool p{margin:0;font-size:.9rem;color:var(--ink2)}
+a.tool .path{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--muted);margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:.89rem}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:"IBM Plex Mono",monospace;font-size:.67rem;letter-spacing:.11em;
+ text-transform:uppercase;color:var(--muted);font-weight:400}
+td code{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--accent);
+ background:var(--accent-soft);padding:1px 5px;border-radius:2px}
+.note{margin:26px 0 0;padding:13px 15px;background:var(--surface2);
+ border:1px solid var(--rule);border-radius:2px;font-size:.87rem;color:var(--ink2)}
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--rule);
+ font-size:.82rem;color:var(--muted)}
+a{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="lbl">Reasoning corpus &middot; work in progress</div>
+  <h1>Drug Discoverers</h1>
+  <p class="sub">A roster of great drug discoverers, the public artifacts that record how they
+  reason, and a question bank distilled from them &mdash; used to build indication dossiers
+  rather than to critique finished ones.</p>
+
+  <div class="stats">
+    <div class="stat"><b>120</b><span class="lbl">people</span></div>
+    <div class="stat"><b>61</b><span class="lbl">grade A</span></div>
+    <div class="stat"><b>282</b><span class="lbl">sources</span></div>
+    <div class="stat"><b>33</b><span class="lbl">questions</span></div>
+  </div>
+
+  <h2>Tools</h2>
+  <div class="tools">
+    <a class="tool" href="./dossier/question-bank.html">
+      <span class="name">Discoverer Question Bank</span>
+      <p>33 questions from 31 named discoverers, ordered as kill gates then dossier
+      sections. Each carries where to look and what absence of evidence means.</p>
+      <span class="path">dossier/question-bank.html</span>
+    </a>
+    <a class="tool" href="./triage.html">
+      <span class="name">Drug Discoverer Triage</span>
+      <p>Card-by-card review of the 120-person roster &mdash; keep, unsure, or drop &mdash;
+      with verification links and keyboard shortcuts.</p>
+      <span class="path">triage.html</span>
+    </a>
+  </div>
+
+  <h2>What is in here</h2>
+  <table>
+    <thead><tr><th>Path</th><th>What it is</th></tr></thead>
+    <tbody>
+      <tr><td><code>discoverers.py</code></td><td>The 120-person roster. Source of truth; regenerates the CSV and Markdown views.</td></tr>
+      <tr><td><code>sources.md</code></td><td>Source manifest for the 61 Grade A people &mdash; 282 URLs, graded by confidence.</td></tr>
+      <tr><td><code>dossier/questions.yaml</code></td><td>The question bank. Each card names a persona and a source.</td></tr>
+      <tr><td><code>dossier/build_dossier.py</code></td><td>Renders an indication dossier spine from the bank.</td></tr>
+      <tr><td><code>ingest/</code></td><td>The crawler. Untested against the live web &mdash; see its README.</td></tr>
+    </tbody>
+  </table>
+
+  <p class="note"><b>Two caveats worth carrying.</b> The 282 source URLs came from search
+  results and none has been fetched to confirm it resolves &mdash;
+  <code>sources/check_links.py</code> verifies them all in one pass. And the question bank's
+  personas are reconstructions from public writing, not the people; every card cites a source
+  so the attribution can be checked.</p>
+
+  <footer>
+    <a href="https://github.com/jbmichel/drug-discoverers">github.com/jbmichel/drug-discoverers</a>
+    &middot; the two pages above are the same HTML that is published as Claude Artifacts;
+    served from here they keep their state in your browser rather than in the Artifact store.
+  </footer>
+</div>
+</body>
+</html>
